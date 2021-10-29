@@ -198,9 +198,12 @@
      */
     function createEditor(container, xhr, cb) {
         var lang = getResponseLanguage(xhr);
+        var content = xhr.responseText;
+        if (lang === 'json') {
+            content = JSON.stringify(JSON.parse(content), null, '\t'); }
         require.config({ paths: { 'vs': 'monaco-editor/min/vs' }});
         require(['vs/editor/editor.main'], function() {
-            var model = monaco.editor.createModel(xhr.responseText, lang);
+            var model = monaco.editor.createModel(content, lang);
             var editor = monaco.editor.create(container, {
                 model: model,
                 automaticLayout: true,
